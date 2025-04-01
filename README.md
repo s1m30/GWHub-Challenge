@@ -4,6 +4,10 @@
 
 ### Scrapes Latest Research Papers from Top AI Platforms: Anthropic, Google 🧠
 
+- Anthropic Research Website: [https://www.anthropic.com/research/](https://www.anthropic.com/research/)
+- Google Deepmind Research Website: [https://deepmind.google/research/publications/](https://deepmind.google/research/publications/)
+- SerpAPI: [https://serpapi.com/](https://serpapi.com/)
+  
 1.  **Web Scraping Strategy 🕸️**
 
     - **Approach 🎯**: This project showcases a hybrid approach to web scraping, targeting both DeepMind and Anthropic websites. The Anthropic scraper utilizes Selenium to handle dynamic content, while the DeepMind scraper relies on BeautifulSoup for direct HTML parsing.
