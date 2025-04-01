@@ -12,7 +12,9 @@
 
     - **Approach 🎯**: This project showcases a hybrid approach to web scraping, targeting both DeepMind and Anthropic websites. The Anthropic scraper utilizes Selenium to handle dynamic content, while the DeepMind scraper relies on BeautifulSoup for direct HTML parsing.
 
-    - **Handling Scraping Challenges 🚧**: A significant challenge was the dynamic content loading on the Anthropic research website. Selenium's `WebDriverWait` mechanism was crucial to ensure elements loaded before scraping, making it possible to access research papers. While the Anthropic website lacked pagination, the DeepMind research site implemented pagination, which was addressed by iteratively scraping pages using a `while` loop until no more content was found. Although no major anti-scraping mechanisms were encountered during development, the Anthropic scraper's Selenium foundation allows for future integration of advanced techniques like SeleniumBase's UC (Undetected ChromeDriver) mode to bypass CAPTCHAs and Cloudflare challenges.
+    - **Handling Scraping Challenges 🚧**: A significant challenge was the dynamic content loading on the Anthropic research website. Selenium's `WebDriverWait` mechanism was crucial to ensure elements loaded before scraping, making it possible to access research papers.
+    - While the Anthropic website lacked pagination, the DeepMind research site implemented pagination, which was addressed by iteratively scraping pages using a `for` loop which ran based on the maximum number documents a user specified.
+    -  Although no major anti-scraping mechanisms were encountered during development, the Anthropic scraper's Selenium foundation allows for future integration of advanced techniques like SeleniumBase's UC (Undetected ChromeDriver) mode to bypass CAPTCHAs and Cloudflare challenges.
 
     - **Data Format 🗂️**: A uniform data schema was defined for both web scrapers and API tools to ensure consistency. The schema includes the following fields:
 
