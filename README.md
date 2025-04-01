@@ -41,7 +41,6 @@
       - **Task 3: Data Analysis and Visualizations 📊**:
         - **Number of Papers per Author**: This analysis requires extracting author names from the data and counting paper contributions per author.
         - **Visualization of Similar Papers**: To visualize similar papers, embedding titles and excerpts would be necessary to calculate similarity metrics.
-        - **Analysis by Date**: No specific data processing is required for date-based analysis.
 
 3.  **API-based Alternatives 🔄**
 
