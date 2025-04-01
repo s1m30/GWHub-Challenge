@@ -46,3 +46,5 @@
 3.  **API-based Alternatives 🔄**
 
     - **SerpAPI Google Scholar API**: SerpAPI's Google Scholar API is utilized not only as an alternative data source but also to aggregate a broader range of research papers beyond those exclusively listed on Anthropic and Google DeepMind's websites, enhancing the dataset's comprehensiveness.
+
+![Scraper Architecture](https://github.com/user-attachments/assets/9d974b71-de9e-49bf-b24b-aa9fa07c58d1)
