@@ -1,21 +1,19 @@
-from typing import NamedTuple, List
+from typing import NamedTuple, List,Literal
 import sqlite3
 class ResearchPaperSchema(NamedTuple):
     """
     Ensures all API data are in the same format
-    Args:
-        NamedTuple (_type_): _description_
     """
     title: str
-    authors: List[str]
+    authors: str
     date: str
     research_link: str
-    additional_links: List[str]
+    additional_links: str
     excerpt: str
 
 
 class WebScraper():
-    def __init__(self,base_url,API, max_docs,timeline):
+    def __init__(self,max_docs:int,storage_type:Literal["csv", "db"]):
         """
         Describes Base Webscraper
 
@@ -24,55 +22,67 @@ class WebScraper():
             API : Depends if an API is being used
             max_docs : Maximum number of data to scrape
         """
-        self.api=API
-        self.base_url=base_url
         self.max_docs = max_docs
-        self.timeline = timeline
+        self.storage_type = storage_type
+        self.storage_handlers= {
+            "csv": self.save_data_to_csv,
+            "db": self.save_data_to_db
+        }
     
-    def save_data_to_db(self, data):
+    def save_data_to_db(self, data,file_name="scraped_data.db"):
         """
         Saves document title and content to an SQLite database.
         Initializes the database and table if they don't exist.
         """
         # # Connect to an SQLite database (or create it if it doesn't exist)
-        conn = sqlite3.connect('scraped_data.db')
+        conn = sqlite3.connect(file_name)
         # # Create a cursor object using the cursor() method
         cursor = conn.cursor()
         # # Create table
         cursor.execute('''CREATE TABLE IF NOT EXISTS documents
-                    (title TEXT, author TEXT, summary TEXT, link TEXT, date TEXT, additional_link TEXT, excerpt TEXT)''')
+                    (title TEXT, author TEXT, link TEXT, date DATE, additional_link TEXT, excerpt TEXT)''')
         # # Insert a row of data
-        cursor.execute("INSERT INTO documents (title,author,summary,link,date, additional_link, excerpt) VALUES (?, ?, ?, ?, ?, ?, ?)", (data["title"], data["authors"], data["summary"], data["research_link"], data["date"], data["additional_links"], data["excerpt"]))
+        cursor.execute("INSERT INTO documents (title,author,link,date, additional_link, excerpt) VALUES (?, ?, ?, ?, ?, ?)", (data.title, data.authors, data.research_link, data.date, data.additional_links, data.excerpt))
         # # Save (commit) the changes
         conn.commit()
         # # Close the connection
         conn.close()
     
     
-    def save_data_to_csv(self, data_list, filename='scraped_data.csv'):
+    def save_data_to_csv(self, data, filename='scraped_data.csv'):
         """
-        Saves a list of research paper data to a CSV file.
-
-        Args:
-            data_list (list): List of dictionaries, where each dictionary
-                               represents a research paper's data.
-            filename (str): The name of the CSV file to save to.
+        Saves research paper data to a CSV file.
         """
-        import csv
+        import os
+        import csv 
+        
+        file_exists = os.path.isfile(filename)  # Check if file exists
 
-        with open(filename, mode='w', newline='', encoding='utf-8') as file:
+        with open(filename, mode='a', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
 
-            # Write the header row
-            if data_list:
-                header = data_list[0]._fields # Use fields from ResearchPaperSchema
+            # Write the header only if the file is new
+            if not file_exists:
+                header = data._fields  # Use fields from ResearchPaperSchema
                 writer.writerow(header)
 
-            # Write data rows
-            for data_item in data_list:
-                # Format lists to strings for CSV
-                row = [str(item) if isinstance(item, list) else item for item in data_item]
-                writer.writerow(row)
+            # Format lists to strings for CSV
+            row = [str(item) if isinstance(item, list) else item for item in data]
+            writer.writerow(row)
+                
+    def format_research_paper_data(self, title, authors, date, research_link, additional_links, excerpt):
+        """
+        Formats raw data into ResearchPaperSchema.
+        """
+        # Create and return a ResearchPaperSchema instance
+        return ResearchPaperSchema(
+            title=title,
+            authors=authors or "N/A",
+            date=date or "N/A",
+            research_link=research_link,
+            additional_links=additional_links or "N/A",
+            excerpt=excerpt 
+        )
                 
     def print_results(self, data: ResearchPaperSchema):
         """

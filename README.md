@@ -14,7 +14,18 @@
 
     - **Handling Scraping Challenges 🚧**:
       - A significant challenge was the dynamic content loading on the Anthropic research website. Selenium's `WebDriverWait` mechanism was crucial to ensure elements loaded before scraping, making it possible to access research papers.
+      ```
+      WebDriverWait(driver, 20).until(
+      EC.presence_of_element_located((By.CLASS_NAME, "PostList_post-card__1g0fm"))
+      )
+      ```
       - While the Anthropic website lacked pagination, the DeepMind research site implemented pagination, which was addressed by iteratively scraping pages using a `for` loop which ran based on the maximum number documents a user specified.
+      ```
+      for item in list_items:
+        if self.update_counter(count)>=self.max_docs:
+            print(f"Reached maximum document limit:{self.max_docs}")
+            return
+      ```
       -  Although no major anti-scraping mechanisms were encountered during development, the Anthropic scraper's Selenium foundation allows for future integration of advanced techniques like SeleniumBase's UC (Undetected ChromeDriver) mode to bypass CAPTCHAs and Cloudflare challenges.
 
     - **Data Format 🗂️**: A uniform data schema was defined for both web scrapers and API tools to ensure consistency. The schema includes the following fields:
@@ -52,6 +63,9 @@
 3.  **API-based Alternatives 🔄**
 
     - **SerpAPI Google Scholar API**: SerpAPI's Google Scholar API is utilized not only as an alternative data source but also to aggregate a broader range of research papers beyond those exclusively listed on Anthropic and Google DeepMind's websites, enhancing the dataset's comprehensiveness.
+    ```
+    search = serpapi.Client(api_key=api_key).search(params)
+    ```
 
 4. **Optimizing Scraper for long-term Usage**🚀
 
